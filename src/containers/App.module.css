@@ -1,0 +1,125 @@
+body {
+  font-family: 'Gamja Flower', cursive;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+}
+
+button:focus, input:focus {
+  outline: none;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+/* [consulting screen modal] */
+.consultingWrapper {
+  background-color: yellow;
+  width: 800px;
+  height: 500px;
+}
+
+/* [mode select modal] */
+.modeSelectWrapper {
+  background-color: rgb(79, 91, 255);
+  position: absolute;
+  right: 0;
+  bottom: 100px;
+  margin-right: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px;
+  width: 300px;
+  height: 300px;
+}
+
+.closeButton {
+  float: right;
+}
+
+.modeRow {
+  margin: 18px 10px;
+}
+
+.modeModalHeader {
+  color: white;
+  font-size: 25px;
+}
+
+.modeModalSection {
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px 0px;
+  background-color: white;
+  font-size: 22px;
+}
+
+.modeModalSection div, .modeModalSection button {
+  margin: 4px
+}
+
+.modeModalSection label, .modeModalSection input {
+  margin: 2px
+}
+
+.modeModalSection label {
+  display: inline-block;
+  width: 75px;
+}
+
+.modeModalSection input, .modeModalSection button {
+  border-radius: 7px;
+  border: 1px solid #bfbdbd;
+  line-height: 22px;
+  box-shadow: 2px 2px 0px 0px #717070;
+  font-size: 20px;
+  font-family: 'Gamja Flower', cursive;
+}
+
+.modeModalSection input {
+  width: 159px;
+  padding-left: 7px;
+}
+
+.modeModalSection input::placeholder {
+  font-size: 15px;
+  font-style: italic;
+  font-family: 'Gamja Flower', cursive;
+}
+
+.modeModalSection button {
+  width: 250px;
+}
+
+.modeModalFooter {
+  display: flex;
+  justify-content: center;
+}
+
+.modeModalFooter div, .modeModalFooter button {
+  color: white;
+  font-size: 25px;
+  font-family: 'Gamja Flower', cursive;
+}
+
+.modeModalFooter div {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 150px;
+  margin: 3px;
+  padding: 2px;
+  border-radius: 8px;
+  border: 1px solid white;
+  box-shadow: 2px 2px 0px 0px white;
+}
+
+/* [chatbot] */
+.chatbot {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
