@@ -17,7 +17,7 @@ function ConsultingModal({ onToggleConsulting }: ConsultingProps) {
   const disconnectServer = () => {
     onToggleConsulting();
     const consultant = localStorage.getItem('consultant');
-    socket!.emit('disconnection', nickname, consultant, (message: string) => {
+    socket!.emit('disconnecCustomer', nickname, consultant, (message: string) => {
       alert(message);
       dispatch(initailCustomer());
       socket!.disconnect();
