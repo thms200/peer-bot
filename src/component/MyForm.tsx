@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { PLACEHOLDER } from '../constants';
 
 type MyFormProps = {
-  onSubmit: (form: { nickname: string; email: string }) => void;
+  onSubmit: (form: { nickname: string, email: string, }) => void;
 };
 
 function MyForm({ onSubmit }: MyFormProps) {
@@ -27,7 +28,7 @@ function MyForm({ onSubmit }: MyFormProps) {
         <label>Nickname</label>
         <input
           name="nickname"
-          placeholder="Write Your Nickname."
+          placeholder={PLACEHOLDER.NICKNAME}
           onChange={onChange}
           value={nickname}
         />
@@ -36,7 +37,7 @@ function MyForm({ onSubmit }: MyFormProps) {
         <label>Email</label>
         <input
           name="email"
-          placeholder="Write Your Email."
+          placeholder={PLACEHOLDER.EMAIL}
           onChange={onChange}
           value={email}
         />
