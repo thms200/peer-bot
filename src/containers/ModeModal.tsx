@@ -19,12 +19,12 @@ interface ModeModalProps {
 function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
   const dispatch = useDispatch();
   const nickname = useSelector((state: RootState) => state.customer.nickname);
+  const consultant = localStorage.getItem('consultantId');
 
   const requestConsulting = (e: React.MouseEvent<HTMLButtonElement>) => {
     onToggleSelectMode();
     onToggleConsulting();
     const mode: string = e.currentTarget.value;
-    const consultant = localStorage.getItem('consultant');
     const initailSocket = io(process.env.REACT_APP_API_URL!);
     initailSocket.emit('joinCustomer', nickname, mode, consultant, (message: string) => {
       alert(message);
@@ -35,8 +35,7 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
 
   const onSubmit = async(form: { nickname: string; email: string }) => {
     const { nickname, email } = form;
-    const cunsultant = localStorage.getItem('consultant');
-    const payload = { nickname, email, cunsultant };
+    const payload = { nickname, email, consultant };
 
     try{
       return await axios({
