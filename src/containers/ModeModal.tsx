@@ -6,7 +6,7 @@ import { FiVideo, FiMic, FiXSquare } from 'react-icons/fi';
 import classNames from 'classnames/bind';
 import MyForm from '../component/MyForm';
 import { RootState } from '../reducers';
-import { connectSocket, getCustomerName, getCustomerMode } from '../actions';
+import { connectSocket, getCustomerName, getCustomerMode, setRequet } from '../actions';
 import { CN, MODE } from '../constants';
 import styles from './App.module.css';
 const cx = classNames.bind(styles);
@@ -19,9 +19,11 @@ interface ModeModalProps {
 function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
   const dispatch = useDispatch();
   const nickname = useSelector((state: RootState) => state.customer.nickname);
+  const isRequest = useSelector((state: RootState) => state.customer.isRequest);
   const consultant = localStorage.getItem('consultantId');
 
   const requestConsulting = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!isRequest) return alert('닉네임과 이메일을 입력하시고, 사용가능한지 확인해주세요!');
     onToggleSelectMode();
     onToggleConsulting();
     const mode: string = e.currentTarget.value;
@@ -48,6 +50,7 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
           const { data: { result } } = res;
           if (result === 'ok') {
             dispatch(getCustomerName(nickname));
+            dispatch(setRequet(true));
             return alert('사용할 수 있는 닉네임입니다');
           }
         });

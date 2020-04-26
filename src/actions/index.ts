@@ -4,8 +4,9 @@ import {
   GET_CUSTOMER_NAME,
   GET_CUSTOMER_MODE,
   INITIAL_CUSTOMER,
+  SET_REQUEST,
   SocketActionTypes,
-  CustomerActionTypes
+  CustomerActionTypes,
 } from '../constants/types';
 
 export function connectSocket(socket: SocketIOClient.Socket): SocketActionTypes {
@@ -38,5 +39,12 @@ export function getCustomerMode(mode: string): CustomerActionTypes {
 export function initailCustomer(): CustomerActionTypes {
   return {
     type: INITIAL_CUSTOMER,
+  };
+}
+
+export function setRequet(isRequest: boolean): CustomerActionTypes {
+  return {
+    type: SET_REQUEST,
+    isRequest,
   };
 }

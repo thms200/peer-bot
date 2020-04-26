@@ -21,10 +21,12 @@ export type SocketActionTypes = ConnectSocket | IntialSocket;
 export const GET_CUSTOMER_NAME = 'GET_CUSTOMER_NAME';
 export const GET_CUSTOMER_MODE = 'GET_CUSTOMER_MODE';
 export const INITIAL_CUSTOMER = 'INITIAL_CUSTOMER';
+export const SET_REQUEST = 'SET_REQUEST';
 
 export interface CustomerState {
   nickname: string;
   mode: string;
+  isRequest: boolean;
 }
 
 interface GetCustomerName {
@@ -41,4 +43,9 @@ interface InitailCustomer {
   type: typeof INITIAL_CUSTOMER,
 }
 
-export type CustomerActionTypes = GetCustomerName | GetCustomerMode | InitailCustomer;
+interface SetRequest {
+  type: typeof SET_REQUEST,
+  isRequest: boolean,
+}
+
+export type CustomerActionTypes = GetCustomerName | GetCustomerMode | InitailCustomer | SetRequest;
