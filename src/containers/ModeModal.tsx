@@ -30,37 +30,43 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
   const nickname = useSelector((state: RootState) => state.customer.nickname);
   const isRequest = useSelector((state: RootState) => state.customer.isRequest);
   const consultant = localStorage.getItem('consultantId');
+  let isFirstSignal = true;
 
   const requestConsulting = async(e: React.MouseEvent<HTMLButtonElement>) => {
     if (!isRequest) return alert('닉네임과 이메일을 입력하시고, 사용가능한지 확인해주세요!');
-    onToggleSelectMode();
-    onToggleConsulting();
-
     const mode: string = e.currentTarget.value;
     const isVoice = mode === 'Voice';
-    const customerStream = await navigator.mediaDevices.getUserMedia({ video: !isVoice, audio: true });
-    const peer = new Peer({
-      initiator: true,
-      trickle: false,
-      stream: customerStream,
-    });
-
-    const initialSocket = io(process.env.REACT_APP_API_URL!);
-    peer.on('signal', data => {
-      initialSocket.emit('joinCustomer', { nickname, mode, consultant, signal: data }, (message: string) => {
-        alert(message);
+    let customerStream: MediaStream;
+    try {
+      customerStream = await navigator.mediaDevices.getUserMedia({ video: !isVoice, audio: true });
+      const peer = new Peer({
+        initiator: true,
+        trickle: false,
+        stream: customerStream!,
       });
-    });
-    peer.on('stream', stream => {
-      dispatch(connectConsultantStream(stream));
-    });
-    initialSocket.on('acceptConsultant', (signal: any) => {
-      peer.signal(signal);
-    });
-    dispatch(connectSocket(initialSocket));
-    dispatch(connectCustomerStream(customerStream));
-    dispatch(getPeer(peer));
-    dispatch(getCustomerMode(mode));
+  
+      const initialSocket = io(process.env.REACT_APP_API_URL!);
+      peer.on('signal', data => {
+        initialSocket.emit('joinCustomer', { nickname, mode, consultant, signal: data }, (message: string) => {
+          if (isFirstSignal) alert(message);
+          isFirstSignal = false;
+        });
+      });
+      peer.on('stream', stream => {
+        dispatch(connectConsultantStream(stream));
+      });
+      initialSocket.on('acceptConsultant', (signal: any) => {
+        peer.signal(signal);
+      });
+      onToggleSelectMode();
+      onToggleConsulting();
+      dispatch(connectSocket(initialSocket));
+      dispatch(connectCustomerStream(customerStream!));
+      dispatch(getPeer(peer));
+      dispatch(getCustomerMode(mode));
+    } catch(err) {
+      alert('카메라, 마이크 접근 권한을 허락해주세요!');
+    }
   };
 
   const onSubmit = async(form: { nickname: string; email: string }) => {
