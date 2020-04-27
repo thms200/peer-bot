@@ -26,11 +26,11 @@ function ConsultingModal({ onToggleConsulting }: ConsultingProps) {
   const customer = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
-    if (consultant) consultant.current!.srcObject = consultantStream;
+    if (consultant.current) consultant.current!.srcObject = consultantStream;
   }, [consultantStream]);
 
   useEffect(() => {
-    if (customer) customer.current!.srcObject = customerStream;
+    if (customer.current) customer.current!.srcObject = customerStream;
   }, [customerStream]);
 
   const disconnectServer = () => {
@@ -39,7 +39,8 @@ function ConsultingModal({ onToggleConsulting }: ConsultingProps) {
     socket!.emit('leaveCustomer', nickname, consultant, (message: string) => {
       alert(message);
       socket!.disconnect();
-      peer!.removeStream(consultantStream!);
+      console.log('peer', peer);
+      if (peer) peer!.removeStream(customerStream!);
       dispatch(initailCustomer());
       dispatch(initialStreamPeer());
       dispatch(initialSocket());

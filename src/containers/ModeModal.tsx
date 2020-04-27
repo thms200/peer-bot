@@ -51,15 +51,12 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
         alert(message);
       });
     });
-
-    initialSocket.on('acceptConsultant', (signal: any) => {
-      peer.signal(signal);
-    });
-
     peer.on('stream', stream => {
       dispatch(connectConsultantStream(stream));
     });
-
+    initialSocket.on('acceptConsultant', (signal: any) => {
+      peer.signal(signal);
+    });
     dispatch(connectSocket(initialSocket));
     dispatch(connectCustomerStream(customerStream));
     dispatch(getPeer(peer));
