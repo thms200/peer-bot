@@ -3,8 +3,9 @@ body {
 }
 
 button {
-  background-color: transparent;
   border: none;
+  background-color: transparent;
+  font-family: 'Gamja Flower', cursive;
 }
 
 button:focus, input:focus {
@@ -17,23 +18,72 @@ button:hover {
 
 /* [consulting screen modal] */
 .consultingWrapper {
-  background-color: yellow;
-  width: 800px;
-  height: 500px;
+  position: absolute;
+  left: calc(50% - 400px);
+  top: 55px;
+  border-radius: 10px;
+  width: 700px;
+  height: 720px;
+  box-shadow: 0 0 10px;
+  background-color: rgb(79, 91, 255);
+}
+
+.screenWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.videoWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px;
+  width: 500px;
+  height: 281px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px 0px;
+  background-color: white;
+}
+
+.consultingClose {
+  padding-top: 8px;
+  margin-left: 664px;
+}
+
+.voiceMode {
+  width: 0%;
+  height: 0%;
+}
+
+.cameraMode {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
+
+.text {
+  color: white;
+  font-size: 20px;
+}
+
+.ready {
+  color: white;
 }
 
 /* [mode select modal] */
 .modeSelectWrapper {
-  background-color: rgb(79, 91, 255);
   position: absolute;
   right: 0;
   bottom: 100px;
   margin-right: 20px;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 0 10px;
   width: 300px;
   height: 300px;
+  box-shadow: 0 0 10px;
+  background-color: rgb(79, 91, 255);
 }
 
 .closeButton {
@@ -53,8 +103,8 @@ button:hover {
   padding: 10px;
   border-radius: 10px;
   box-shadow: 2px 2px 5px 0px;
-  background-color: white;
   font-size: 22px;
+  background-color: white;
 }
 
 .modeModalSection div, .modeModalSection button {
@@ -71,8 +121,8 @@ button:hover {
 }
 
 .modeModalSection input, .modeModalSection button {
-  border-radius: 7px;
   border: 1px solid #bfbdbd;
+  border-radius: 7px;
   line-height: 22px;
   box-shadow: 2px 2px 0px 0px #717070;
   font-size: 20px;
@@ -80,8 +130,8 @@ button:hover {
 }
 
 .modeModalSection input {
-  width: 159px;
   padding-left: 7px;
+  width: 159px;
 }
 
 .modeModalSection input::placeholder {
@@ -109,11 +159,11 @@ button:hover {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  width: 150px;
   margin: 3px;
   padding: 2px;
-  border-radius: 8px;
   border: 1px solid white;
+  border-radius: 8px;
+  width: 150px;
   box-shadow: 2px 2px 0px 0px white;
 }
 

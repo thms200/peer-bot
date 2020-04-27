@@ -2,11 +2,20 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import io from 'socket.io-client';
+import Peer from 'simple-peer';
 import { FiVideo, FiMic, FiXSquare } from 'react-icons/fi';
 import classNames from 'classnames/bind';
 import MyForm from '../component/MyForm';
 import { RootState } from '../reducers';
-import { connectSocket, getCustomerName, getCustomerMode } from '../actions';
+import {
+  connectSocket,
+  getCustomerName,
+  getCustomerMode,
+  setRequet,
+  connectCustomerStream,
+  connectConsultantStream,
+  getPeer,
+} from '../actions';
 import { CN, MODE } from '../constants';
 import styles from './App.module.css';
 const cx = classNames.bind(styles);
@@ -19,24 +28,47 @@ interface ModeModalProps {
 function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
   const dispatch = useDispatch();
   const nickname = useSelector((state: RootState) => state.customer.nickname);
+  const isRequest = useSelector((state: RootState) => state.customer.isRequest);
+  const consultant = localStorage.getItem('consultantId');
 
-  const requestConsulting = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const requestConsulting = async(e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!isRequest) return alert('닉네임과 이메일을 입력하시고, 사용가능한지 확인해주세요!');
     onToggleSelectMode();
     onToggleConsulting();
+
     const mode: string = e.currentTarget.value;
-    const consultant = localStorage.getItem('consultant');
-    const initailSocket = io(process.env.REACT_APP_API_URL!);
-    initailSocket.emit('joinCustomer', nickname, mode, consultant, (message: string) => {
-      alert(message);
+    const isVoice = mode === 'Voice';
+    const customerStream = await navigator.mediaDevices.getUserMedia({ video: !isVoice, audio: true });
+    const peer = new Peer({
+      initiator: true,
+      trickle: false,
+      stream: customerStream,
     });
-    dispatch(connectSocket(initailSocket));
+
+    const initialSocket = io(process.env.REACT_APP_API_URL!);
+    peer.on('signal', data => {
+      initialSocket.emit('joinCustomer', { nickname, mode, consultant, signal: data }, (message: string) => {
+        alert(message);
+      });
+    });
+
+    initialSocket.on('acceptConsultant', (signal: any) => {
+      peer.signal(signal);
+    });
+
+    peer.on('stream', stream => {
+      dispatch(connectConsultantStream(stream));
+    });
+
+    dispatch(connectSocket(initialSocket));
+    dispatch(connectCustomerStream(customerStream));
+    dispatch(getPeer(peer));
     dispatch(getCustomerMode(mode));
   };
 
   const onSubmit = async(form: { nickname: string; email: string }) => {
     const { nickname, email } = form;
-    const cunsultant = localStorage.getItem('consultant');
-    const payload = { nickname, email, cunsultant };
+    const payload = { nickname, email, consultant };
 
     try{
       return await axios({
@@ -49,6 +81,7 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
           const { data: { result } } = res;
           if (result === 'ok') {
             dispatch(getCustomerName(nickname));
+            dispatch(setRequet(true));
             return alert('사용할 수 있는 닉네임입니다');
           }
         });
