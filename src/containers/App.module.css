@@ -5,6 +5,7 @@ body {
 button {
   border: none;
   background-color: transparent;
+  font-family: 'Gamja Flower', cursive;
 }
 
 button:focus, input:focus {
@@ -38,7 +39,7 @@ button:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 10px;
+  margin: 8px;
   width: 500px;
   height: 281px;
   border-radius: 10px;
@@ -46,9 +47,8 @@ button:hover {
   background-color: white;
 }
 
-
 .consultingClose {
-  padding-top: 10px;
+  padding-top: 8px;
   margin-left: 664px;
 }
 
@@ -63,9 +63,13 @@ button:hover {
   border-radius: 10px;
 }
 
-.name {
+.text {
   color: white;
   font-size: 20px;
+}
+
+.ready {
+  color: white;
 }
 
 /* [mode select modal] */

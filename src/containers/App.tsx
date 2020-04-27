@@ -17,7 +17,6 @@ function App() {
           onToggleConsulting={toggleConsulting}
         />
       }
-
       {!isShowModeSelect &&
         <ModeModal
           onToggleSelectMode={toggleSelectMode}

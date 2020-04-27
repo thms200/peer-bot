@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FiMic, FiXSquare } from 'react-icons/fi';
 import classNames from 'classnames/bind';
 import { RootState } from '../reducers';
-import { initailCustomer, initialSocket } from '../actions';
+import { initailCustomer, initialSocket, setRequet, initialStreamPeer } from '../actions';
 import styles from './App.module.css';
 const cx = classNames.bind(styles);
 
@@ -16,6 +16,9 @@ function ConsultingModal({ onToggleConsulting }: ConsultingProps) {
   const socket = useSelector((state: RootState) => state.socket.socket);
   const nickname = useSelector((state: RootState) => state.customer.nickname);
   const mode = useSelector((state: RootState) => state.customer.mode);
+  const customerStream = useSelector((state: RootState) => state.stream.customerStream);
+  const consultantStream = useSelector((state: RootState) => state.stream.consultantStream);
+  const peer = useSelector((state: RootState) => state.stream.peer);
   const consultantName = localStorage.getItem('consultantName');
   const isVoice = mode === 'Voice';
 
@@ -23,22 +26,24 @@ function ConsultingModal({ onToggleConsulting }: ConsultingProps) {
   const customer = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
-    const cameraPermission = isVoice ? false : true;
-    navigator.mediaDevices
-      .getUserMedia({ video: cameraPermission, audio: true })
-      .then((stream: any) => {
-        if (customer) customer.current!.srcObject = stream;
-      });
-  }, []);
+    if (consultant) consultant.current!.srcObject = consultantStream;
+  }, [consultantStream]);
+
+  useEffect(() => {
+    if (customer) customer.current!.srcObject = customerStream;
+  }, [customerStream]);
 
   const disconnectServer = () => {
     onToggleConsulting();
     const consultant = localStorage.getItem('consultantId');
     socket!.emit('leaveCustomer', nickname, consultant, (message: string) => {
       alert(message);
-      dispatch(initailCustomer());
       socket!.disconnect();
+      peer!.removeStream(consultantStream!);
+      dispatch(initailCustomer());
+      dispatch(initialStreamPeer());
       dispatch(initialSocket());
+      dispatch(setRequet(false));
     });
   };
 
@@ -48,20 +53,20 @@ function ConsultingModal({ onToggleConsulting }: ConsultingProps) {
         <FiXSquare size={20} color={'white'} />
       </button>
       <section className={styles.screenWrapper}>
-        <div className={styles.name}>{`${consultantName}님`}</div>
+        <div className={styles.text}>{`${consultantName}님`}</div>
         <div className={styles.videoWrapper}>
           {isVoice && <FiMic size={150} color={'rgb(79, 91, 255)'} />}
           <video
-            playsInline muted autoPlay
+            playsInline autoPlay
             ref={consultant}
             className={cx({ voiceMode: isVoice, cameraMode: !isVoice })}>
           </video>
         </div>
-        <div className={styles.name}>{`${nickname}님`}</div>
+        <div className={styles.text}>{`${nickname}님`}</div>
         <div className={styles.videoWrapper}>
           {isVoice && <FiMic size={150} color={'rgb(79, 91, 255)'} />}
           <video
-            playsInline muted autoPlay
+            playsInline autoPlay
             ref={customer}
             className={cx({ voiceMode: isVoice, cameraMode: !isVoice })}>
           </video>
