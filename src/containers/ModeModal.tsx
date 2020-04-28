@@ -39,34 +39,34 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
     let customerStream: MediaStream;
     try {
       customerStream = await navigator.mediaDevices.getUserMedia({ video: !isVoice, audio: true });
-      const peer = new Peer({
-        initiator: true,
-        trickle: false,
-        stream: customerStream!,
-      });
-  
-      const initialSocket = io(process.env.REACT_APP_API_URL!);
-      peer.on('signal', data => {
-        initialSocket.emit('joinCustomer', { nickname, mode, consultant, signal: data }, (message: string) => {
-          if (isFirstSignal) alert(message);
-          isFirstSignal = false;
-        });
-      });
-      peer.on('stream', stream => {
-        dispatch(connectConsultantStream(stream));
-      });
-      initialSocket.on('acceptConsultant', (signal: any) => {
-        peer.signal(signal);
-      });
-      onToggleSelectMode();
-      onToggleConsulting();
-      dispatch(connectSocket(initialSocket));
-      dispatch(connectCustomerStream(customerStream!));
-      dispatch(getPeer(peer));
-      dispatch(getCustomerMode(mode));
     } catch(err) {
       alert(ALERT.REQUEST_PERMISSION);
     }
+    const peer = new Peer({
+      initiator: true,
+      trickle: false,
+      stream: customerStream!,
+    });
+
+    const initialSocket = io(process.env.REACT_APP_API_URL!);
+    peer.on('signal', data => {
+      initialSocket.emit('joinCustomer', { nickname, mode, consultant, signal: data }, (message: string) => {
+        if (isFirstSignal) alert(message);
+        isFirstSignal = false;
+      });
+    });
+    peer.on('stream', stream => {
+      dispatch(connectConsultantStream(stream));
+    });
+    initialSocket.on('acceptConsultant', (signal: any) => {
+      peer.signal(signal);
+    });
+    onToggleSelectMode();
+    onToggleConsulting();
+    dispatch(connectSocket(initialSocket));
+    dispatch(connectCustomerStream(customerStream!));
+    dispatch(getPeer(peer));
+    dispatch(getCustomerMode(mode));
   };
 
   const onSubmit = async(form: { nickname: string; email: string }) => {
@@ -100,7 +100,7 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
       </button>
       <header className={cx(CN.MODEROW, CN.MODE_HEADER)}>
         <div>상담 품질 향상을 위해,</div>
-        <div>모든 상담 내용은 녹음됩니다.</div>
+        <div>모든 상담 내용은 녹음(or 녹화)됩니다.</div>
       </header>
       <section className={cx(CN.MODEROW, CN.MODE_SECTION)}>
         <MyForm onSubmit={onSubmit} />

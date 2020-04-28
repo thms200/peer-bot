@@ -39,7 +39,7 @@ function ConsultingModal({ onToggleConsulting }: ConsultingProps) {
     socket!.emit('leaveCustomer', nickname, consultant, (message: string) => {
       alert(message);
       socket!.disconnect();
-      if (peer) peer!.removeStream(customerStream!);
+      if (peer) peer!.destroy();
       dispatch(initailCustomer());
       dispatch(initialStreamPeer());
       dispatch(initialSocket());
