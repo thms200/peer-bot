@@ -50,15 +50,17 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
 
     const initialSocket = io(process.env.REACT_APP_API_URL!);
     peer.on('signal', data => {
-      initialSocket.emit('joinCustomer', { nickname, mode, consultant, signal: data }, (message: string) => {
-        if (isFirstSignal) alert(message);
-        isFirstSignal = false;
-      });
+      if (isFirstSignal) {
+        initialSocket.emit('joinCustomer', { nickname, mode, consultant, signal: data }, (message: string) => {
+          alert(message);
+          isFirstSignal = false;
+        });
+      }
     });
     peer.on('stream', stream => {
       dispatch(connectConsultantStream(stream));
     });
-    initialSocket.on('acceptConsultant', (signal: any) => {
+    initialSocket.on('acceptConsultant', (signal: string) => {
       peer.signal(signal);
     });
     onToggleSelectMode();
@@ -100,7 +102,7 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
       </button>
       <header className={cx(CN.MODEROW, CN.MODE_HEADER)}>
         <div>상담 품질 향상을 위해,</div>
-        <div>모든 상담 내용은 녹음(or 녹화)됩니다.</div>
+        <div>모든 상담은 녹음(녹화)됩니다.</div>
       </header>
       <section className={cx(CN.MODEROW, CN.MODE_SECTION)}>
         <MyForm onSubmit={onSubmit} />
