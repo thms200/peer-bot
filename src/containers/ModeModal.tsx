@@ -16,7 +16,7 @@ import {
   connectConsultantStream,
   getPeer,
 } from '../actions';
-import { CN, MODE } from '../constants';
+import { CN, MODE, ALERT } from '../constants';
 import styles from './App.module.css';
 const cx = classNames.bind(styles);
 
@@ -30,35 +30,43 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
   const nickname = useSelector((state: RootState) => state.customer.nickname);
   const isRequest = useSelector((state: RootState) => state.customer.isRequest);
   const consultant = localStorage.getItem('consultantId');
+  let isFirstSignal = true;
 
   const requestConsulting = async(e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!isRequest) return alert('닉네임과 이메일을 입력하시고, 사용가능한지 확인해주세요!');
-    onToggleSelectMode();
-    onToggleConsulting();
-
+    if (!isRequest) return alert(ALERT.INVALID_NICKNAME);
     const mode: string = e.currentTarget.value;
     const isVoice = mode === 'Voice';
-    const customerStream = await navigator.mediaDevices.getUserMedia({ video: !isVoice, audio: true });
+    let customerStream: MediaStream;
+    try {
+      customerStream = await navigator.mediaDevices.getUserMedia({ video: !isVoice, audio: true });
+    } catch(err) {
+      alert(ALERT.REQUEST_PERMISSION);
+    }
     const peer = new Peer({
       initiator: true,
       trickle: false,
-      stream: customerStream,
+      stream: customerStream!,
     });
 
     const initialSocket = io(process.env.REACT_APP_API_URL!);
     peer.on('signal', data => {
-      initialSocket.emit('joinCustomer', { nickname, mode, consultant, signal: data }, (message: string) => {
-        alert(message);
-      });
+      if (isFirstSignal) {
+        initialSocket.emit('joinCustomer', { nickname, mode, consultant, signal: data }, (message: string) => {
+          alert(message);
+          isFirstSignal = false;
+        });
+      }
     });
     peer.on('stream', stream => {
       dispatch(connectConsultantStream(stream));
     });
-    initialSocket.on('acceptConsultant', (signal: any) => {
+    initialSocket.on('acceptConsultant', (signal: string) => {
       peer.signal(signal);
     });
+    onToggleSelectMode();
+    onToggleConsulting();
     dispatch(connectSocket(initialSocket));
-    dispatch(connectCustomerStream(customerStream));
+    dispatch(connectCustomerStream(customerStream!));
     dispatch(getPeer(peer));
     dispatch(getCustomerMode(mode));
   };
@@ -79,7 +87,7 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
           if (result === 'ok') {
             dispatch(getCustomerName(nickname));
             dispatch(setRequet(true));
-            return alert('사용할 수 있는 닉네임입니다');
+            return alert(ALERT.VALID_NICKNAME);
           }
         });
     } catch(err) {
@@ -94,7 +102,7 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
       </button>
       <header className={cx(CN.MODEROW, CN.MODE_HEADER)}>
         <div>상담 품질 향상을 위해,</div>
-        <div>모든 상담 내용은 녹음됩니다.</div>
+        <div>모든 상담은 녹음(녹화)됩니다.</div>
       </header>
       <section className={cx(CN.MODEROW, CN.MODE_SECTION)}>
         <MyForm onSubmit={onSubmit} />
