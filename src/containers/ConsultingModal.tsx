@@ -57,7 +57,8 @@ function ConsultingModal({ onToggleConsulting }: ConsultingProps) {
         <div className={styles.videoWrapper}>
           {isVoice && <FiMic size={150} color={'rgb(79, 91, 255)'} />}
           <video
-            playsInline autoPlay
+            playsInline
+            autoPlay
             ref={consultant}
             className={cx({ voiceMode: isVoice, cameraMode: !isVoice })}>
           </video>
@@ -66,7 +67,9 @@ function ConsultingModal({ onToggleConsulting }: ConsultingProps) {
         <div className={styles.videoWrapper}>
           {isVoice && <FiMic size={150} color={'rgb(79, 91, 255)'} />}
           <video
-            playsInline autoPlay
+            playsInline
+            autoPlay
+            muted
             ref={customer}
             className={cx({ voiceMode: isVoice, cameraMode: !isVoice })}>
           </video>
