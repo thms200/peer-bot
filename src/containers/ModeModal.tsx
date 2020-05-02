@@ -29,7 +29,7 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
   const dispatch = useDispatch();
   const nickname = useSelector((state: RootState) => state.customer.nickname);
   const isRequest = useSelector((state: RootState) => state.customer.isRequest);
-  const consultant = localStorage.getItem('consultantId');
+  const consultantId = localStorage.getItem('consultantId');
   let isFirstSignal = true;
 
   const requestConsulting = async(e: React.MouseEvent<HTMLButtonElement>) => {
@@ -38,7 +38,9 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
     const isVoice = mode === 'Voice';
     let customerStream: MediaStream;
     try {
-      customerStream = await navigator.mediaDevices.getUserMedia({ video: !isVoice, audio: true });
+      customerStream = await navigator.mediaDevices.getUserMedia({
+        video: !isVoice, audio: true
+      });
     } catch(err) {
       alert(ALERT.REQUEST_PERMISSION);
     }
@@ -51,10 +53,13 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
     const initialSocket = io(process.env.REACT_APP_API_URL!);
     peer.on('signal', data => {
       if (isFirstSignal) {
-        initialSocket.emit('joinCustomer', { nickname, mode, consultant, signal: data }, (message: string) => {
-          alert(message);
-          isFirstSignal = false;
-        });
+        initialSocket.emit(
+          'joinCustomer',
+          { nickname, mode, consultantId, signal: data },
+          (message: string) => {
+            alert(message);
+            isFirstSignal = false;
+          });
       }
     });
     peer.on('stream', stream => {
@@ -72,24 +77,18 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
   };
 
   const onSubmit = async(form: { nickname: string; email: string }) => {
-    const { nickname, email } = form;
-    const payload = { nickname, email, consultant };
-
-    try{
-      return await axios({
+    try {
+      const { nickname, email } = form;
+      const payload = { nickname, email, consultantId };
+      await axios({
         method: 'post',
         url: `${process.env.REACT_APP_API_URL_CUSTOMER}`,
         headers: { 'Content-Type': 'application/json' },
         data: payload
-      })
-        .then(async(res) => {
-          const { data: { result } } = res;
-          if (result === 'ok') {
-            dispatch(getCustomerName(nickname));
-            dispatch(setRequet(true));
-            return alert(ALERT.VALID_NICKNAME);
-          }
-        });
+      });
+      dispatch(getCustomerName(nickname));
+      dispatch(setRequet(true));
+      return alert(ALERT.VALID_NICKNAME);
     } catch(err) {
       alert(err.response.data.errMessage);
     }
