@@ -29,7 +29,7 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
   const dispatch = useDispatch();
   const nickname = useSelector((state: RootState) => state.customer.nickname);
   const isRequest = useSelector((state: RootState) => state.customer.isRequest);
-  const consultantId = localStorage.getItem('consultantId');
+  const consultant = localStorage.getItem('consultantId');
   let isFirstSignal = true;
 
   const requestConsulting = async(e: React.MouseEvent<HTMLButtonElement>) => {
@@ -55,7 +55,7 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
       if (isFirstSignal) {
         initialSocket.emit(
           'joinCustomer',
-          { nickname, mode, consultantId, signal: data },
+          { nickname, mode, consultant, signal: data },
           (message: string) => {
             alert(message);
             isFirstSignal = false;
@@ -79,7 +79,7 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
   const onSubmit = async(form: { nickname: string; email: string }) => {
     try {
       const { nickname, email } = form;
-      const payload = { nickname, email, consultantId };
+      const payload = { nickname, email, consultant };
       await axios({
         method: 'post',
         url: `${process.env.REACT_APP_API_URL_CUSTOMER}`,
