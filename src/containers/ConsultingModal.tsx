@@ -69,7 +69,6 @@ function ConsultingModal({ onToggleConsulting }: ConsultingProps) {
           <video
             playsInline
             autoPlay
-            muted
             ref={customer}
             className={cx({ voiceMode: isVoice, cameraMode: !isVoice })}>
           </video>
