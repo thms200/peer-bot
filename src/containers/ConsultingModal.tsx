@@ -33,6 +33,10 @@ function ConsultingModal({ onToggleConsulting }: ConsultingProps) {
     if (customer.current) customer.current!.srcObject = customerStream;
   }, [customerStream]);
 
+  useEffect(() => {
+    return () => { socket!.disconnect(); };
+  }, []);
+
   const disconnectServer = () => {
     onToggleConsulting();
     const consultant = localStorage.getItem('consultantId');
@@ -69,6 +73,7 @@ function ConsultingModal({ onToggleConsulting }: ConsultingProps) {
           <video
             playsInline
             autoPlay
+            muted
             ref={customer}
             className={cx({ voiceMode: isVoice, cameraMode: !isVoice })}>
           </video>
