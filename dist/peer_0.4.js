@@ -28,6 +28,11 @@
   link.setAttribute('href', `${cdnUrl}/${mainStyleHaschChuck}`);
   head.appendChild(link);
 
+  const font = document.createElement('link');
+  font.setAttribute('href', 'https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap');
+  font.setAttribute('rel', 'stylesheet');
+  head.appendChild(font);
+
   const script = document.createElement('script');
   script.setAttribute('src', `${cdnUrl}/combine/${mainHashChuck},${numberHashChuck},${runtimeMainHash}`);
   body.appendChild(script);
