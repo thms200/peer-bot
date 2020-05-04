@@ -5,7 +5,7 @@
   newDiv.setAttribute('id', 'peer-root');
   body.appendChild(newDiv);
 
-  //consultant id, name
+  //consultant id, name 저장 및 삭제
   const consultantId = document.querySelector('.consultant-id');
   const consultantName = document.querySelector('.consultant-name');
   localStorage.setItem('consultantId', consultantId.id);
@@ -16,9 +16,9 @@
   //cdn
   const cdnUrl = 'https://cdn.jsdelivr.net';
   const github = 'gh/thms200/peer-bot/dist';
-  const mainHashChuck = `${github}/main.67389550.chunk.js`;
+  const mainHashChuck = `${github}/main.79b354fc.chunk.js`;
   const mainStyleHaschChuck = `${github}/main.99441111.chunk.css`;
-  const numberHashChuck = `${github}/2.bd7b69aa.chunk.js`;
+  const numberHashChuck = `${github}/2.36992bba.chunk.js`;
   const runtimeMainHash = `${github}/runtime-main.21811c53.js`;
 
   const head = document.querySelector('head');
