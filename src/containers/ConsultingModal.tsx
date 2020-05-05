@@ -34,7 +34,7 @@ function ConsultingModal({ onToggleConsulting }: ConsultingProps) {
   }, [customerStream]);
 
   useEffect(() => {
-    return () => { socket!.disconnect(); };
+    return () => { if (socket) socket!.disconnect(); };
   }, []);
 
   const disconnectServer = () => {
