@@ -41,7 +41,7 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
       customerStream = await navigator.mediaDevices.getUserMedia({
         video: !isVoice, audio: true
       });
-    } catch(err) {
+    } catch (err) {
       alert(ALERT.REQUEST_PERMISSION);
     }
     const peer = new Peer({
@@ -89,8 +89,8 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
       dispatch(getCustomerName(nickname));
       dispatch(setRequet(true));
       return alert(ALERT.VALID_NICKNAME);
-    } catch(err) {
-      alert(err.response.data.errMessage);
+    } catch (err) {
+      if (err.response.data) alert(err.response.data.errMessage);
     }
   };
 
@@ -101,7 +101,7 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
       </button>
       <header className={cx(CN.MODEROW, CN.MODE_HEADER)}>
         <div>상담 품질 향상을 위해,</div>
-        <div>모든 상담은 녹음(녹화)됩니다.</div>
+        <div>모든 상담은 녹음됩니다.</div>
       </header>
       <section className={cx(CN.MODEROW, CN.MODE_SECTION)}>
         <MyForm onSubmit={onSubmit} />
