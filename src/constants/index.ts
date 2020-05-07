@@ -20,3 +20,5 @@ export const ALERT = {
   INVALID_NICKNAME: '닉네임과 이메일을 입력하시고, 사용가능한지 확인해주세요!',
   REQUEST_PERMISSION: '카메라, 마이크 접근 권한을 허락해주세요!',
 };
+
+export const SERVER = 'https://api.withpeer.site';
