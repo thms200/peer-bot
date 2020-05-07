@@ -16,7 +16,7 @@ import {
   connectConsultantStream,
   getPeer,
 } from '../actions';
-import { CN, MODE, ALERT } from '../constants';
+import { CN, MODE, ALERT, SERVER } from '../constants';
 import styles from './App.module.css';
 const cx = classNames.bind(styles);
 
@@ -50,7 +50,7 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
       stream: customerStream!,
     });
 
-    const initialSocket = io(process.env.REACT_APP_API_URL!);
+    const initialSocket = io(SERVER);
     peer.on('signal', data => {
       if (isFirstSignal) {
         initialSocket.emit(
@@ -82,7 +82,7 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
       const payload = { nickname, email, consultant };
       await axios({
         method: 'post',
-        url: `${process.env.REACT_APP_API_URL_CUSTOMER}`,
+        url: `${SERVER}/api/customers`,
         headers: { 'Content-Type': 'application/json' },
         data: payload
       });
