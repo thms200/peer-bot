@@ -50,7 +50,7 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
       stream: customerStream!,
     });
 
-    const initialSocket = io(SERVER);
+    const initialSocket = io(SERVER,  { transports: ['websocket'] });
     peer.on('signal', data => {
       if (isFirstSignal) {
         initialSocket.emit(
