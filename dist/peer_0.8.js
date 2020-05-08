@@ -16,7 +16,7 @@
   //cdn
   const cdnUrl = 'https://cdn.jsdelivr.net';
   const github = 'gh/thms200/peer-bot/dist';
-  const mainHashChuck = `${github}/main.42a1232a.chunk.js`;
+  const mainHashChuck = `${github}/main.6a3aedf8.chunk.js`;
   const mainStyleHaschChuck = `${github}/main.99441111.chunk.css`;
   const numberHashChuck = `${github}/2.36992bba.chunk.js`;
   const runtimeMainHash = `${github}/runtime-main.21811c53.js`;
