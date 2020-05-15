@@ -40,7 +40,7 @@ CDN을 통해 누구나 쉽게 화상/음성 고객 상담 기능을 연동 할 
 * styled-components
 * Jest for unit-test
 * Enzyme for component-test
-* Cypress for E2E test
+* Cypress for E2E test<br>
 ![peer_E2E](https://user-images.githubusercontent.com/48754671/81775342-a738c480-9527-11ea-9a64-956c2df8eea6.gif)
 * ESLint
 
@@ -135,7 +135,7 @@ index.html 파일의 body tag에 아래의 코드를 입력하세요.)
 * 기술 Stack 검토
 * [balsamiq을 이용한 Wireframe 작업](https://balsamiq.cloud/skzze0r/piubt71/r6A79)
 * [Database Schema 설계](https://www.lucidchart.com/documents/edit/d3a61bf7-e444-46a7-8ef9-db93cb00d6a1/0_0?shared=true)
-* [Notion Tode를 이용한 Task Managemnet](https://www.notion.so/0e0b72e1660d4d449eea7d4d2c4e2c95?v=9b456fa4bf2c4f0e96eaa5958957a7ad)
+* [Notion Todo를 이용한 Task Managemnet](https://www.notion.so/0e0b72e1660d4d449eea7d4d2c4e2c95?v=9b456fa4bf2c4f0e96eaa5958957a7ad)
 * Git을 이용한 Version관리 (Client/Server 분리, Branch 분리)
 
 
