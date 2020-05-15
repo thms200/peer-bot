@@ -90,7 +90,7 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
       dispatch(setRequet(true));
       return alert(ALERT.VALID_NICKNAME);
     } catch (err) {
-      if (err.response.data) alert(err.response.data.errMessage);
+      if (err.response) alert(err.response.data.errMessage);
     }
   };
 
