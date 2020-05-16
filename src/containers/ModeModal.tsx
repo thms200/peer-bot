@@ -16,7 +16,7 @@ import {
   connectConsultantStream,
   getPeer,
 } from '../actions';
-import { CN, MODE, ALERT, SERVER } from '../constants';
+import { CN, MODE, ALERT, SERVER, SOCKET_SERVER } from '../constants';
 import styles from './App.module.css';
 const cx = classNames.bind(styles);
 
@@ -50,7 +50,7 @@ function ModeModal({ onToggleSelectMode, onToggleConsulting }: ModeModalProps) {
       stream: customerStream!,
     });
 
-    const initialSocket = io(SERVER);
+    const initialSocket = io(SOCKET_SERVER);
     peer.on('signal', data => {
       if (isFirstSignal) {
         initialSocket.emit(

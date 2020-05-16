@@ -22,3 +22,4 @@ export const ALERT = {
 };
 
 export const SERVER = 'https://api.withpeer.site';
+export const SOCKET_SERVER = 'https://api.withpeer.site:3030';
